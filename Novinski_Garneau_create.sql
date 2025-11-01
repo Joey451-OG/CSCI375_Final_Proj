@@ -1,5 +1,5 @@
 -- Created by Redgate Data Modeler (https://datamodeler.redgate-platform.com)
--- Last modification date: 2025-11-01 16:10:42.774
+-- Last modification date: 2025-11-01 17:16:33.967
 
 -- tables
 -- Table: English
@@ -15,6 +15,7 @@ CREATE TABLE German (
     WordID_wordID int  NOT NULL,
     translation varchar(40)  NOT NULL,
     isFormal bool  NOT NULL,
+    gender char(3)  NULL,
     CONSTRAINT German_pk PRIMARY KEY (WordID_wordID)
 );
 
@@ -23,6 +24,7 @@ CREATE TABLE Italian (
     WordID_wordID int  NOT NULL,
     translation varchar(25)  NOT NULL,
     isFormal bool  NOT NULL,
+    gender char(3)  NULL,
     CONSTRAINT Italian_pk PRIMARY KEY (WordID_wordID)
 );
 
@@ -45,7 +47,6 @@ CREATE TABLE WordID (
     Swadesh_SwID int  NOT NULL,
     wordID int  NOT NULL,
     Lang int  NOT NULL,
-    Gender char(3)  NOT NULL,
     UNIQUE INDEX wordID (wordID),
     CONSTRAINT WordID_pk PRIMARY KEY (Swadesh_SwID,wordID)
 );
