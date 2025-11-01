@@ -1,29 +1,29 @@
 -- Created by Redgate Data Modeler (https://datamodeler.redgate-platform.com)
--- Last modification date: 2025-11-01 15:09:30.913
+-- Last modification date: 2025-11-01 16:10:42.774
 
 -- tables
 -- Table: English
 CREATE TABLE English (
-    WordID_Lang int  NOT NULL,
+    WordID_wordID int  NOT NULL,
     translation varchar(20)  NOT NULL,
     isFormal bool  NOT NULL,
-    CONSTRAINT SwID PRIMARY KEY (WordID_Lang)
+    CONSTRAINT English_pk PRIMARY KEY (WordID_wordID)
 ) COMMENT 'conjugationID could be used for plural and verb conjugations maybe?';
 
 -- Table: German
 CREATE TABLE German (
-    WordID_Lang int  NOT NULL,
+    WordID_wordID int  NOT NULL,
     translation varchar(40)  NOT NULL,
     isFormal bool  NOT NULL,
-    CONSTRAINT German_pk PRIMARY KEY (WordID_Lang)
+    CONSTRAINT German_pk PRIMARY KEY (WordID_wordID)
 );
 
 -- Table: Italian
 CREATE TABLE Italian (
-    WordID_Lang int  NOT NULL,
+    WordID_wordID int  NOT NULL,
     translation varchar(25)  NOT NULL,
     isFormal bool  NOT NULL,
-    CONSTRAINT Italian_pk PRIMARY KEY (WordID_Lang)
+    CONSTRAINT Italian_pk PRIMARY KEY (WordID_wordID)
 );
 
 -- Table: Part_Of_Speech
@@ -43,24 +43,25 @@ CREATE TABLE Swadesh (
 -- Table: WordID
 CREATE TABLE WordID (
     Swadesh_SwID int  NOT NULL,
+    wordID int  NOT NULL,
     Lang int  NOT NULL,
     Gender char(3)  NOT NULL,
-    wordID int  NOT NULL,
-    CONSTRAINT WordID_pk PRIMARY KEY (Swadesh_SwID,Lang)
+    UNIQUE INDEX wordID (wordID),
+    CONSTRAINT WordID_pk PRIMARY KEY (Swadesh_SwID,wordID)
 );
 
 -- foreign keys
 -- Reference: English_WordID (table: English)
-ALTER TABLE English ADD CONSTRAINT English_WordID FOREIGN KEY English_WordID (WordID_Lang)
-    REFERENCES WordID (Lang);
+ALTER TABLE English ADD CONSTRAINT English_WordID FOREIGN KEY English_WordID (WordID_wordID)
+    REFERENCES WordID (wordID);
 
 -- Reference: German_WordID (table: German)
-ALTER TABLE German ADD CONSTRAINT German_WordID FOREIGN KEY German_WordID (WordID_Lang)
-    REFERENCES WordID (Lang);
+ALTER TABLE German ADD CONSTRAINT German_WordID FOREIGN KEY German_WordID (WordID_wordID)
+    REFERENCES WordID (wordID);
 
 -- Reference: Italian_WordID (table: Italian)
-ALTER TABLE Italian ADD CONSTRAINT Italian_WordID FOREIGN KEY Italian_WordID (WordID_Lang)
-    REFERENCES WordID (Lang);
+ALTER TABLE Italian ADD CONSTRAINT Italian_WordID FOREIGN KEY Italian_WordID (WordID_wordID)
+    REFERENCES WordID (wordID);
 
 -- Reference: Part_Of_Speech_Swadesh (table: Part_Of_Speech)
 ALTER TABLE Part_Of_Speech ADD CONSTRAINT Part_Of_Speech_Swadesh FOREIGN KEY Part_Of_Speech_Swadesh (Swadesh_SwID)
