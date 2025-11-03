@@ -68,8 +68,8 @@ ita_words = [deu_and_ita[index] for index in range(100, 200)]
 
 # populare German
 
-for wordId in range(100, 200):
-    current_word = deu_words[wordId - 100]
+for wordId in range(101, 201):
+    current_word = deu_words[wordId - 100 - 1]
     smt = ''
 
     if ' ' in current_word:
@@ -78,9 +78,25 @@ for wordId in range(100, 200):
     else:
         smt = f"INSERT INTO German (WordID_wordID, translation) VALUES ({wordId}, '{current_word}')"
 
-    print(smt)
+    #print(smt)
     cursor.execute(smt)
 
+connection.commit()
+
+# populate Italian
+
+for wordId in range(201, 301):
+    current_word = ita_words[wordId - 200 - 1]
+    smt = ''
+
+    if ' ' in current_word:
+        word_array = current_word.split(" ")
+        smt = f"INSERT INTO Italian VALUES ({wordId}, '{word_array[0]}', '{word_array[1]}')"
+    else:
+        smt = f"INSERT INTO Italian (WordID_wordID, translation) VALUES ({wordId}, '{current_word}')"
+
+    print(smt)
+    cursor.execute(smt)
 
 connection.commit()
 
