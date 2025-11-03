@@ -1,12 +1,11 @@
 -- Created by Redgate Data Modeler (https://datamodeler.redgate-platform.com)
--- Last modification date: 2025-11-03 15:19:23.519
+-- Last modification date: 2025-11-03 16:44:37.709
 
 -- tables
 -- Table: English
 CREATE TABLE English (
     WordID_wordID int  NOT NULL,
     translation varchar(20)  NOT NULL,
-    isFormal bool  NOT NULL,
     CONSTRAINT English_pk PRIMARY KEY (WordID_wordID)
 ) COMMENT 'conjugationID could be used for plural and verb conjugations maybe?';
 
@@ -14,7 +13,6 @@ CREATE TABLE English (
 CREATE TABLE German (
     WordID_wordID int  NOT NULL,
     translation varchar(40)  NOT NULL,
-    isFormal bool  NOT NULL,
     gender char(3)  NULL,
     CONSTRAINT German_pk PRIMARY KEY (WordID_wordID)
 );
@@ -23,7 +21,6 @@ CREATE TABLE German (
 CREATE TABLE Italian (
     WordID_wordID int  NOT NULL,
     translation varchar(25)  NOT NULL,
-    isFormal bool  NOT NULL,
     gender char(3)  NULL,
     CONSTRAINT Italian_pk PRIMARY KEY (WordID_wordID)
 );
@@ -31,7 +28,7 @@ CREATE TABLE Italian (
 -- Table: Part_Of_Speech
 CREATE TABLE Part_Of_Speech (
     Swadesh_SwID int  NOT NULL,
-    POS char(10)  NOT NULL,
+    POS varchar(10)  NOT NULL,
     isConcrete int  NULL,
     CONSTRAINT Part_Of_Speech_pk PRIMARY KEY (Swadesh_SwID)
 );
