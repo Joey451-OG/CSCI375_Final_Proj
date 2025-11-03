@@ -1,5 +1,5 @@
 -- Created by Redgate Data Modeler (https://datamodeler.redgate-platform.com)
--- Last modification date: 2025-11-01 17:16:33.967
+-- Last modification date: 2025-11-03 15:19:23.519
 
 -- tables
 -- Table: English
@@ -46,7 +46,7 @@ CREATE TABLE Swadesh (
 CREATE TABLE WordID (
     Swadesh_SwID int  NOT NULL,
     wordID int  NOT NULL,
-    Lang int  NOT NULL,
+    Lang char(3)  NOT NULL,
     UNIQUE INDEX wordID (wordID),
     CONSTRAINT WordID_pk PRIMARY KEY (Swadesh_SwID,wordID)
 );
