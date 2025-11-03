@@ -1,5 +1,5 @@
 -- Created by Redgate Data Modeler (https://datamodeler.redgate-platform.com)
--- Last modification date: 2025-11-03 16:44:37.709
+-- Last modification date: 2025-11-03 22:02:51.578
 
 -- tables
 -- Table: English
@@ -28,7 +28,7 @@ CREATE TABLE Italian (
 -- Table: Part_Of_Speech
 CREATE TABLE Part_Of_Speech (
     Swadesh_SwID int  NOT NULL,
-    POS varchar(10)  NOT NULL,
+    POS varchar(20)  NOT NULL,
     isConcrete int  NULL,
     CONSTRAINT Part_Of_Speech_pk PRIMARY KEY (Swadesh_SwID)
 );
