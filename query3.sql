@@ -1,17 +1,15 @@
 SELECT
-    g.translation AS GermanWord
+    CASE 
+        WHEN p.isConcrete = 1 THEN 'Concrete Nouns'
+        ELSE 'Non-Concrete Nouns'
+    END AS NounType,
+    COUNT(s.SwID) AS TotalCount
 FROM
-    German g
-    INNER JOIN WordID w ON g.WordID_wordID = w.wordID
+    Part_Of_Speech p
+    INNER JOIN Swadesh s ON p.Swadesh_SwID = s.SwID
 WHERE
-    w.Swadesh_SwID IN (
-        SELECT
-            w2.Swadesh_SwID
-        FROM
-            WordID w2
-            INNER JOIN German g2 ON w2.wordID = g2.WordID_wordID
-        WHERE
-            g2.gender = 'f'
-    )
+    p.POS = 'noun'
+GROUP BY
+    p.isConcrete
 ORDER BY
-    g.translation;
+    TotalCount DESC;
