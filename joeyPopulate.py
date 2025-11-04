@@ -95,10 +95,48 @@ for wordId in range(201, 301):
     else:
         smt = f"INSERT INTO Italian (WordID_wordID, translation) VALUES ({wordId}, '{current_word}')"
 
-    print(smt)
+    #print(smt)
     cursor.execute(smt)
 
 connection.commit()
+
+# populate POS
+
+# bro I already know this is gonna be mega cancer
+
+for swId in range(1, 101):
+    pos = ''
+    isConcrete = True
+    isNoun = False
+
+    if swId in [1, 2, 3]:
+        pos = 'pronoun'
+    elif swId in [4, 5]:
+        pos = 'demonstrative'
+    elif swId in [6, 7]:
+        pos = 'inquisitive'
+    elif swId in [8, 9, 10, 11, 12, 13, 14, 15]:
+        pos = 'adjective'
+    elif swId in list(range(16, 54)) or swId in list(range(72, 84)) or swId in list(range(85, 87)) or swId == 92 or swId == 100:
+        pos = 'noun'
+        isNoun = True
+    elif swId in list(range(54, 72)) or swId == 84:
+        pos = 'verb'
+    elif swId in list(range(87, 92)) or swId in list(range(93, 100)):
+        pos = 'adjective'
+    
+    if swId in [92, 100]: # day is not in the original 100?
+        isConcrete = False
+    
+    if isNoun:
+        smt = f"INSERT INTO Part_Of_Speech VALUES ({swId}, '{pos}', {isConcrete})"
+    else:
+        smt = f"INSERT INTO Part_Of_Speech (Swadesh_SwID, POS) VALUES ({swId}, '{pos}')"
+
+    cursor.execute(smt)
+
+connection.commit()
+
 
 cursor.close()
 connection.close()
