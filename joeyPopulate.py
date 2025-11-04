@@ -6,6 +6,8 @@ db_key = ''
 with open ('.database_key.json', 'r') as file:
     db_key = json.load(file);
 
+sql_populate_file = open('populate_autogen.sql', 'w')
+
 connection = mysql.connector.connect (
     host=db_key['servername'],
     port=3306,
@@ -17,7 +19,9 @@ connection = mysql.connector.connect (
 cursor = connection.cursor()
 
 for _ in range(100):
-    cursor.execute("INSERT INTO Swadesh VALUES ()")
+    smt = "INSERT INTO Swadesh VALUES ()"
+    sql_populate_file.write(smt + ";\n")
+    cursor.execute(smt)
 
 connection.commit()
 
@@ -36,6 +40,7 @@ for counter in range(1, 301):
         swId = counter - 200
     
     smt = f"INSERT INTO WordID VALUES ({swId}, {counter}, '{language}')"
+    sql_populate_file.write(smt + ";\n")
     
     #print(smt)
     cursor.execute(smt)
@@ -51,6 +56,7 @@ english_file.close()
 
 for wordId in range(1, 101):
     smt = f"INSERT INTO English VALUES ({wordId}, '{english_words[wordId - 1]}')"
+    sql_populate_file.write(smt + ";\n")
     
     #print(smt)
     cursor.execute(smt)
@@ -78,6 +84,7 @@ for wordId in range(101, 201):
     else:
         smt = f"INSERT INTO German (WordID_wordID, translation) VALUES ({wordId}, '{current_word}')"
 
+    sql_populate_file.write(smt + ";\n")
     #print(smt)
     cursor.execute(smt)
 
@@ -95,6 +102,7 @@ for wordId in range(201, 301):
     else:
         smt = f"INSERT INTO Italian (WordID_wordID, translation) VALUES ({wordId}, '{current_word}')"
 
+    sql_populate_file.write(smt + ";\n")
     #print(smt)
     cursor.execute(smt)
 
@@ -125,7 +133,7 @@ for swId in range(1, 101):
     elif swId in list(range(87, 92)) or swId in list(range(93, 100)):
         pos = 'adjective'
     
-    if swId in [92, 100]: # day is not in the original 100?
+    if swId in [92, 100]:
         isConcrete = False
     
     if isNoun:
@@ -133,10 +141,11 @@ for swId in range(1, 101):
     else:
         smt = f"INSERT INTO Part_Of_Speech (Swadesh_SwID, POS) VALUES ({swId}, '{pos}')"
 
+    sql_populate_file.write(smt + ";\n")
     cursor.execute(smt)
 
 connection.commit()
 
-
+sql_populate_file.close()
 cursor.close()
 connection.close()
