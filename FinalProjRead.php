@@ -46,7 +46,7 @@
             echo "<tr>";
 
             // Delete Button
-            echo "<td><a href='FinalDelete.php?id='".urldecode($english_row["SwID"])."'
+            echo "<td><a href='FinalProjDelete.php?id=".urldecode($english_row["SwID"])."'
             onclick='return confirm(\"Are you sure?\");'>
             <img src='red_x_icon.jpg' width='15px' height='15px'></a></td>";
 

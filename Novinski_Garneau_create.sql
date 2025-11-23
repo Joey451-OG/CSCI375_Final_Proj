@@ -1,5 +1,5 @@
 -- Created by Redgate Data Modeler (https://datamodeler.redgate-platform.com)
--- Last modification date: 2025-11-03 22:02:51.578
+-- Last modification date: 2025-11-23 20:56:53.877
 
 -- tables
 -- Table: English
@@ -51,23 +51,33 @@ CREATE TABLE WordID (
 -- foreign keys
 -- Reference: English_WordID (table: English)
 ALTER TABLE English ADD CONSTRAINT English_WordID FOREIGN KEY English_WordID (WordID_wordID)
-    REFERENCES WordID (wordID);
+    REFERENCES WordID (wordID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
 
 -- Reference: German_WordID (table: German)
 ALTER TABLE German ADD CONSTRAINT German_WordID FOREIGN KEY German_WordID (WordID_wordID)
-    REFERENCES WordID (wordID);
+    REFERENCES WordID (wordID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
 
 -- Reference: Italian_WordID (table: Italian)
 ALTER TABLE Italian ADD CONSTRAINT Italian_WordID FOREIGN KEY Italian_WordID (WordID_wordID)
-    REFERENCES WordID (wordID);
+    REFERENCES WordID (wordID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
 
 -- Reference: Part_Of_Speech_Swadesh (table: Part_Of_Speech)
 ALTER TABLE Part_Of_Speech ADD CONSTRAINT Part_Of_Speech_Swadesh FOREIGN KEY Part_Of_Speech_Swadesh (Swadesh_SwID)
-    REFERENCES Swadesh (SwID);
+    REFERENCES Swadesh (SwID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
 
 -- Reference: WordID_Swadesh (table: WordID)
 ALTER TABLE WordID ADD CONSTRAINT WordID_Swadesh FOREIGN KEY WordID_Swadesh (Swadesh_SwID)
-    REFERENCES Swadesh (SwID);
+    REFERENCES Swadesh (SwID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
 
 -- End of file.
 
