@@ -1,0 +1,47 @@
+MariaDB [jmgarnea]> source query1.sql;
++---------------+------------+
+| PartOfSpeech  | TotalWords |
++---------------+------------+
+| noun          |         54 |
+| adjective     |         20 |
+| verb          |         19 |
+| pronoun       |          3 |
+| demonstrative |          2 |
+| inquisitive   |          2 |
++---------------+------------+
+6 rows in set (0.001 sec)
+
+MariaDB [jmgarnea]> source query2.sql;
++------------+
+| GermanWord |
++------------+
+| Asche      |
+| Borke      |
+| Brüste     |
+| Erde       |
+| Feder      |
+| Frau       |
+| Hand       |
+| Haut       |
+| Kralle     |
+| Laus       |
+| Leber      |
+| Nase       |
+| Person     |
+| Sonne      |
+| Wolke      |
+| Wurzel     |
+| Zunge      |
++------------+
+17 rows in set (0.001 sec)
+
+MariaDB [jmgarnea]> source query3.sql;
++--------------------+------------+
+| NounType           | TotalCount |
++--------------------+------------+
+| Concrete Nouns     |         52 |
+| Non-Concrete Nouns |          2 |
++--------------------+------------+
+2 rows in set (0.000 sec)
+
+MariaDB [jmgarnea]> notee
