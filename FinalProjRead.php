@@ -55,10 +55,14 @@
             echo "<td>{$italian_row["translation"]}</td>";
             echo "<td>{$german_row["translation"]}</td>";
             echo "<td>{$pos_row["POS"]}</td>";
+            echo "<td><a href='updateEntry.php?id=".urlencode($english_row['SwID'])."'> edit </a></td>";
         }
 
         echo "</tbody>";
         echo "</table>";
+
+        echo "<a href='createEntry.php'> add an Entry </a>";
+
 
         echo "</center>";
         echo "</div>";
