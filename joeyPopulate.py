@@ -25,25 +25,36 @@ for _ in range(100):
 
 connection.commit()
 
+swId = 1
 # populate WordID
-for counter in range(1, 301):
+for counter in range(1, 201, 2):
     language = ''
-    swId = counter
 
-    if counter <= 100 and not counter > 100:
-        language = 'eng'
-    if counter > 100 and not counter > 200:
-        language = 'deu'
-        swId = counter - 100
-    if counter > 200:
-        language = 'ita'
-        swId = counter - 200
-    
-    smt = f"INSERT INTO WordID VALUES ({swId}, {counter}, '{language}')"
+    # english all odd
+    smt = f"INSERT INTO WordID VALUES ({swId}, {counter}, 'eng')"
     sql_populate_file.write(smt + ";\n")
     
-    #print(smt)
+    # print(smt)
     cursor.execute(smt)
+
+
+    # german all even
+    counter += 1
+    smt = f"INSERT INTO WordID VALUES ({swId}, {counter}, 'deu')"
+    sql_populate_file.write(smt + ";\n")
+    # print(smt)
+
+    cursor.execute(smt)
+
+    # italian all negative odd
+    ita_id = -1 * (counter - 1)
+    smt = f"INSERT INTO WordID VALUES ({swId}, {ita_id}, 'ita')"
+    sql_populate_file.write(smt + ";\n")
+    # print(smt)
+
+    cursor.execute(smt)
+
+    swId += 1
 
 connection.commit()
 
@@ -54,8 +65,9 @@ english_file = open("EnglishSwadeshList", "r")
 english_words = [line.rstrip() for line in english_file]
 english_file.close()
 
-for wordId in range(1, 101):
-    smt = f"INSERT INTO English VALUES ({wordId}, '{english_words[wordId - 1]}')"
+for wordId in range(1, 201, 2):
+    index = int((wordId + 1) / 2) - 1
+    smt = f"INSERT INTO English VALUES ({wordId}, '{english_words[index]}')"
     sql_populate_file.write(smt + ";\n")
     
     #print(smt)
@@ -74,8 +86,9 @@ ita_words = [deu_and_ita[index] for index in range(100, 200)]
 
 # populare German
 
-for wordId in range(101, 201):
-    current_word = deu_words[wordId - 100 - 1]
+for wordId in range(2, 201, 2):
+    index = int(wordId / 2) - 1
+    current_word = deu_words[index]
     smt = ''
 
     if ' ' in current_word:
@@ -92,15 +105,16 @@ connection.commit()
 
 # populate Italian
 
-for wordId in range(201, 301):
-    current_word = ita_words[wordId - 200 - 1]
+for wordId in range(1, 201, 2):
+    index = int((wordId + 1) / 2) - 1 
+    current_word = ita_words[index]
     smt = ''
 
     if ' ' in current_word:
         word_array = current_word.split(" ")
-        smt = f"INSERT INTO Italian VALUES ({wordId}, '{word_array[0]}', '{word_array[1]}')"
+        smt = f"INSERT INTO Italian VALUES ({-wordId}, '{word_array[0]}', '{word_array[1]}')"
     else:
-        smt = f"INSERT INTO Italian (WordID_wordID, translation) VALUES ({wordId}, '{current_word}')"
+        smt = f"INSERT INTO Italian (WordID_wordID, translation) VALUES ({-wordId}, '{current_word}')"
 
     sql_populate_file.write(smt + ";\n")
     #print(smt)
