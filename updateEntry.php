@@ -61,7 +61,15 @@ if (isset($_POST['submit'])) {
         $stmt->execute([$swID]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        $query_english = "SELECT English.translation AS Eng, WordID.wordID AS EngID FROM Swadesh LEFT JOIN WordID ON WordID.Swadesh_SWID = Swadesh.SwID AND WordID.Lang = 'eng' LEFT JOIN English ON English.WordID_wordID = WordID.wordID WHERE Swadesh.SwID = ?";
+        $query_german = "SELECT German.translation AS Ger, WordID.wordID AS GerID FROM Swadesh LEFT JOIN WordID ON WordID.Swadesh_SWID = (Swadesh.SwID + 100) AND WordID.Lang = 'deu' LEFT JOIN German ON German.WordID_wordID = WordID.wordID WHERE Swadesh.SwID = ?";
+
+
         if ($row) {
+
+            foreach ($row as $key => $value) {
+                echo "Key: $key; Value: $value <br/>";
+            }
 
             $posOptions = ['noun', 'verb', 'adjective', 'adverb', 'pronoun', 'preposition', 'conjunction', 'interjection'];
 
@@ -71,6 +79,9 @@ if (isset($_POST['submit'])) {
             echo '<p>Italian:<input type="text" name="Ita" value="'.htmlspecialchars($row['Ita'] ?? '').'"></p>';
 
             echo '<p>Part of Speech: <select name="POS">';
+            
+            // pretty impressive Worth :D
+            // - Joey
             foreach ($posOptions as $option) {
                 $selected = ($row['POS'] === $option) ? 'selected' : '';
                 echo "<option value='$option' $selected>$option</option>";
