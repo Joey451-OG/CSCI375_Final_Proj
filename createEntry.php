@@ -21,45 +21,59 @@
 
 	if (isset($_POST["submit"])) {
 
+		if (isset($_POST["Eng"], $_POST["Ger"], $_POST["Ita"], $_POST["POS"]) &&
+			$_POST["Eng"] !== "" && $_POST["Ger"] !== "" && $_POST["Ita"] !== "") {
 
+			$stmtSw = $mysqli->prepare("INSERT INTO Swadesh (SwID) VALUES (NULL)");
+			$stmtSw->execute();
+			$swID = $mysqli->lastInsertId();
 
-if (isset($_POST["Eng"], $_POST["Ger"], $_POST["Ita"], $_POST["POS"]) &&
-    $_POST["Eng"] !== "" && $_POST["Ger"] !== "" && $_POST["Ita"] !== "") {
+			$stmt = $mysqli->prepare("SELECT MAX(wordID) as maxID FROM WordID");
+			$stmt->execute();
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);
+			$maxID = $row["maxID"] + 1;
 
-    $stmtSw = $mysqli->prepare("INSERT INTO Swadesh (SwID) VALUES (NULL)");
-    $stmtSw->execute();
-    $swID = $mysqli->lastInsertId();
+			
+			// shit shit shit shit shit shit shit shit shit shit shit shit shit shit
 
-    $stmt = $mysqli->prepare("SELECT MAX(wordID) as maxID FROM WordID");
-    $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    $maxID = $row["maxID"] + 1;
+			$stmtW = $mysqli->prepare("INSERT INTO WordID (Swadesh_SwID, wordID, Lang) VALUES (?, ?, 'eng')");
+			$stmtW->execute([$swID, $maxID]);
 
-    $stmtW = $mysqli->prepare("INSERT INTO WordID (Swadesh_SwID, wordID, Lang) VALUES (?, ?, 'eng')");
-    $stmtW->execute([$swID, $maxID]);
+			$stmtWGer = $mysqli -> prepare("INSERT INTO WordID (Swadesh_SwID, wordID, Lang) Values (?, ?, 'deu')");
+			$stmtWGer -> execute([$swID, ($maxID + 100)]);
 
-    $stmt2 = $mysqli->prepare("INSERT INTO English (WordID_wordID, translation) VALUES (?, ?)");
-    $stmt2->execute([$maxID, $_POST["Eng"]]);
+			$stmtWIta = $mysqli -> prepare("INSERT INTO WordID (Swadesh_SwID, wordID, Lang) VALUES (?, ?, 'ita')");
+			$stmtWIta -> execute([$swID, ($maxID + 200)]);
 
-    $stmtG = $mysqli->prepare("INSERT INTO German (WordID_wordID, translation) VALUES (?, ?)");
-    $stmtG->execute([$maxID, $_POST["Ger"]]);
+			$stmt2 = $mysqli->prepare("INSERT INTO English (WordID_wordID, translation) VALUES (?, ?)");
+			$stmt2->execute([$maxID, $_POST["Eng"]]);
 
-    $stmtI = $mysqli->prepare("INSERT INTO Italian (WordID_wordID, translation) VALUES (?, ?)");
-    $stmtI->execute([$maxID, $_POST["Ita"]]);
+			$stmtG = $mysqli->prepare("INSERT INTO German (WordID_wordID, translation) VALUES (?, ?)");
+			$stmtG->execute([$maxID, $_POST["Ger"]]);
 
-    // 5) Insert POS using Swadesh ID (CORRECT)
-    $stmt3 = $mysqli->prepare("INSERT INTO Part_Of_Speech (Swadesh_SwID, POS) VALUES (?, ?)");
-    $stmt3->execute([$swID, $_POST["POS"]]);
+			$stmtI = $mysqli->prepare("INSERT INTO Italian (WordID_wordID, translation) VALUES (?, ?)");
+			$stmtI->execute([$maxID, $_POST["Ita"]]);
 
-    $_SESSION["message"] = $_POST["Eng"] . " has been added.";
-    redirect("createEntry.php");
-}
+			// 5) Insert POS using Swadesh ID (CORRECT)
+			$stmt3 = $mysqli->prepare("INSERT INTO Part_Of_Speech (Swadesh_SwID, POS) VALUES (?, ?)");
+			$stmt3->execute([$swID, $_POST["POS"]]);
+
+			$_SESSION["message"] = $_POST["Eng"] . " has been added.";
+			
+			// might just be my opinion here but I think
+			// this should redirect to the main page
+			// - Joey
+			redirect("FinalProjRead.php");
+		}
 
 		else {
 			
             $_SESSION["message"] = "Unable to add word. Fill in all information!";
 
-			redirect("createEntry.php");
+			// might just be my opinion here but I think
+			// this should redirect to the main page
+			// - Joey
+			redirect("FinalProjRead.php");
 		}
 	}
 	else {
@@ -77,9 +91,24 @@ if (isset($_POST["Eng"], $_POST["Ger"], $_POST["Ita"], $_POST["POS"]) &&
 			echo '<p>German form: <input type="text" name="Ger"></p>';
 			echo '<p>Italian form: <input type="text" name="Ita"></p>';
 			echo '<p>Part of speech: <select name="POS">';
-			while ($g = $stmt4->fetch(PDO::FETCH_ASSOC)) {
-			echo '<option value="'.$g["POS"].'">'.$g["POS"].'</option>';
+			
+			/** Old while loop error
+			 *  --------------------
+			 * 	The old loop would cause 
+			 * 	unexpected behavior if you were
+			 * 	to delete all instances of a 
+			 *  particular part of speech.
+			 * 
+			 * Fixed by copying your solution from updateEntry.php 
+			*/
+			
+			
+			$posOptions = ['noun', 'verb', 'adjective', 'adverb', 'pronoun', 'preposition', 'conjunction', 'interjection'];
+
+			foreach ($posOptions as $pos) {
+				echo "<option value='{$pos}'>{$pos}</option>";
 			}
+
 			echo '</select></p>';
 
 			echo '<p><input type="submit" name="submit" class="tiny round button" value="Add Word"></p>';
