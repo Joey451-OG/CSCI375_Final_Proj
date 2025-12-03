@@ -14,31 +14,38 @@ echo "<div class='row'>";
 echo "<label for='left-label' class='left inline'>";
 echo "<h3>Update an Entry</h3>";
 
+
 if (isset($_POST['submit'])) {
 
     $stmtE = $mysqli->prepare("UPDATE English SET translation = ? WHERE WordID_wordID = ?");
-    $stmtE->execute([$_POST['Eng'], $_POST['EngID']]);
+    $stmtE->execute([trim($_POST['Eng']), $_POST['EngID']]);
 
-    $stmtG = $mysqli->prepare("UPDATE German SET translation = ? WHERE WordID_wordID = ?");
-    $stmtG->execute([$_POST['Ger'], $_POST['GerID']]);
+    if (trim($_POST['Ger']) !== '' && $_POST['GerID'] !== '') {
+        $stmtG = $mysqli->prepare("UPDATE German SET translation = ? WHERE WordID_wordID = ?");
+        $stmtG->execute([trim($_POST['Ger']), $_POST['GerID']]);
+    }
 
-    $stmtI = $mysqli->prepare("UPDATE Italian SET translation = ? WHERE WordID_wordID = ?");
-    $stmtI->execute([$_POST['Ita'], $_POST['ItaID']]);
+    if (trim($_POST['Ita']) !== '' && $_POST['ItaID'] !== '') {
+        $stmtI = $mysqli->prepare("UPDATE Italian SET translation = ? WHERE WordID_wordID = ?");
+        $stmtI->execute([trim($_POST['Ita']), $_POST['ItaID']]);
+    }
 
     $stmtP = $mysqli->prepare("UPDATE Part_Of_Speech SET POS = ? WHERE Swadesh_SwID = ?");
-    $stmtP->execute([$_POST['POS'], $_POST['SwID']]);
+    $stmtP->execute([trim($_POST['POS']), $_POST['SwID']]);
 
-    $_SESSION['message'] = "Entry updated.";
+    $_SESSION['message'] = "Entry successfully updated.";
     redirect("FinalProjRead.php");
+}
 
-} else {
+else {
 
     if (isset($_GET['id']) && $_GET['id'] !== "") {
 
-        $swID = $_GET['id']; 
+        $swID = $_GET['id'];
 
         $query = "
             SELECT 
+                s.SwID AS SwID,
                 e.translation AS Eng,
                 g.translation AS Ger,
                 i.translation AS Ita,
@@ -61,34 +68,24 @@ if (isset($_POST['submit'])) {
         $stmt->execute([$swID]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $query_english = "SELECT English.translation AS Eng, WordID.wordID AS EngID FROM Swadesh LEFT JOIN WordID ON WordID.Swadesh_SWID = Swadesh.SwID AND WordID.Lang = 'eng' LEFT JOIN English ON English.WordID_wordID = WordID.wordID WHERE Swadesh.SwID = ?";
-        $query_german = "SELECT German.translation AS Ger, WordID.wordID AS GerID FROM Swadesh LEFT JOIN WordID ON WordID.Swadesh_SWID = (Swadesh.SwID + 100) AND WordID.Lang = 'deu' LEFT JOIN German ON German.WordID_wordID = WordID.wordID WHERE Swadesh.SwID = ?";
-
-
         if ($row) {
-
-            foreach ($row as $key => $value) {
-                echo "Key: $key; Value: $value <br/>";
-            }
 
             $posOptions = ['noun', 'verb', 'adjective', 'adverb', 'pronoun', 'preposition', 'conjunction', 'interjection'];
 
             echo '<form method="POST" action="updateEntry.php">';
-            echo '<p>English:<input type="text" name="Eng" value="'.htmlspecialchars($row['Eng'] ?? '').'"></p>';
+            echo '<p>English:<input type="text" name="Eng" value="'.htmlspecialchars($row['Eng']).'" required></p>';
+
             echo '<p>German:<input type="text" name="Ger" value="'.htmlspecialchars($row['Ger'] ?? '').'"></p>';
             echo '<p>Italian:<input type="text" name="Ita" value="'.htmlspecialchars($row['Ita'] ?? '').'"></p>';
 
             echo '<p>Part of Speech: <select name="POS">';
-            
-            // pretty impressive Worth :D
-            // - Joey
             foreach ($posOptions as $option) {
                 $selected = ($row['POS'] === $option) ? 'selected' : '';
                 echo "<option value='$option' $selected>$option</option>";
             }
             echo '</select></p>';
 
-            echo '<input type="hidden" name="SwID" value="'.$swID.'">';
+            echo '<input type="hidden" name="SwID" value="'.$row['SwID'].'">';
             echo '<input type="hidden" name="EngID" value="'.$row['EngID'].'">';
             echo '<input type="hidden" name="GerID" value="'.$row['GerID'].'">';
             echo '<input type="hidden" name="ItaID" value="'.$row['ItaID'].'">';
@@ -97,7 +94,7 @@ if (isset($_POST['submit'])) {
             echo '</form>';
 
         } else {
-            $_SESSION['message'] = "That word could not be found!";
+            $_SESSION['message'] = "Entry not found!";
             redirect("FinalProjRead.php");
         }
 
@@ -105,7 +102,6 @@ if (isset($_POST['submit'])) {
         $_SESSION['message'] = "No ID specified.";
         redirect("FinalProjRead.php");
     }
-
 }
 
 echo "</label>";
@@ -114,4 +110,3 @@ echo "</div>";
 new_footer();
 Database::DBDisconnect();
 ?>
-
