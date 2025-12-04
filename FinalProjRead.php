@@ -34,7 +34,7 @@
         echo "<table>";
         echo "<thead>";
 
-        echo "<tr><td></td><td>Swadesh ID</td><td>English</td><td>Italian</td><td>German</td><td>Part Of Speech</td></tr>";
+        echo "<tr><td></td><td>Swadesh ID</td><td>English</td><td>Italian</td><td>German</td><td>Part Of Speech</td><td></td></tr>";
         echo "</thead>";
         echo "<tbody>";
 
@@ -62,7 +62,14 @@
         echo "</table>";
 
         echo "<a href='createEntry.php'> add an Entry </a>";
+        echo "<br/><br/>";
 
+        echo "<a href='FinalProjQueryOne.php'> POS Occurrences </a>";
+        echo "<br/>";
+        echo "<a href='FinalProjQueryTwo.php'> All Feminine German Words </a>";
+        echo "<br/>";
+        echo "<a href='FinalProjQueryThree.php'> Concrete vs. Non-Concrete Nouns </a>";
+        echo "<br/>";
 
         echo "</center>";
         echo "</div>";
