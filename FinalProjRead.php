@@ -64,11 +64,11 @@
         echo "<a href='createEntry.php'> add an Entry </a>";
         echo "<br/><br/>";
 
-        echo "<a href='FinalProjQueryOne.php'> POS Occurrences </a>";
+        echo "<a href='FinalProjQueryOne.php'> Aggregate: POS Occurrences </a>";
         echo "<br/>";
-        echo "<a href='FinalProjQueryTwo.php'> All Feminine German Words </a>";
+        echo "<a href='FinalProjQueryTwo.php'> Nesting: All Feminine German Words </a>";
         echo "<br/>";
-        echo "<a href='FinalProjQueryThree.php'> Concrete vs. Non-Concrete Nouns </a>";
+        echo "<a href='FinalProjQueryThree.php'> Where: Concrete vs. Non-Concrete Nouns </a>";
         echo "<br/>";
 
         echo "</center>";
